@@ -1,0 +1,14 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pymemcache = ">=3.4.0"
+cassandra-driver = ">=3.24.0"
+
+
+[dev-packages]
+
+[requires]
+python_version = "3.7"

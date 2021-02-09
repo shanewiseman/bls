@@ -1,0 +1,29 @@
+version: "3.0"
+networks:
+    bls:
+
+services:
+    parser:
+        build: ./c/parser/
+        networks:
+            - bls
+    memcached1:
+        image: memcached:latest
+        networks:
+            - bls
+    memcached2:
+        image: memcached:latest
+        networks:
+            - bls
+    memcached3:
+        image: memcached:latest
+        networks:
+            - bls
+    cassandra:
+        image: cassandra:latest
+        networks:
+            - bls
+
+
+
+
