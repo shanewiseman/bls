@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(getData);
+
+      function drawChart(table_data, chart_name) {
+
+        var data = google.visualization.arrayToDataTable(
+                table_data
+        );
+
+        var options = {
+          title: '',
+          curveType: 'function',
+          legend: { position: 'bottom' },
+          'width':1440,
+          'height':300
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById(chart_name));
+
+        chart.draw(data, options);
+      }
+
+
+    function getData(){
+		var xmlhttp = new XMLHttpRequest();
+
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
+			   if (xmlhttp.status == 200) {
+
+                    var price_data = []
+                    var value_data = []
+                    var ratio_data = []
+
+                    raw_data = JSON.parse(xmlhttp.responseText)
+
+
+                    Object.keys(raw_data).forEach(function (key) { 
+                        item_data = raw_data[key]
+
+                        len = item_data.length;
+                        for (i=0; i < len; i++){
+                            price_data.push([key, new Date(item_data[i][0], item_data[i][1]), item_data[i][2]])
+                            value_data.push([key, new Date(item_data[i][0], item_data[i][1]), item_data[i][3]])
+                            ratio_data.push([key, new Date(item_data[i][0], item_data[i][1]), item_data[i][4]])
+                        }
+
+                    })
+                    keys = ['item', 'Date', 'Price']
+                    table_data = [keys].concat(price_data)
+                    drawChart(table_data, "price_chart");
+
+                    keys = ['item', 'Date', 'Value']
+                    table_data = [keys].concat(value_data)
+                    drawChart(table_data, "value_chart");
+
+                    keys = ['item', 'Date', 'Ratio']
+                    table_data = [keys].concat(ratio_data)
+                    drawChart(table_data, "ratio_chart");
+			   }
+			   else if (xmlhttp.status == 400) {
+				  alert('There was an error 400');
+			   }
+			   else {
+				   alert('something else other than 200 was returned');
+			   }
+			}
+		};
+
+		xmlhttp.open("GET", "http://10.0.1.4:12345/2", true);
+		xmlhttp.send();
+    }
+    </script>
+  </head>
+  <body>
+    <div id="price_chart" style="width: 900px; height: 500px"></div>
+    <div id="value_chart" style="width: 900px; height: 500px"></div>
+    <div id="ratio_chart" style="width: 900px; height: 500px"></div>
+  </body>

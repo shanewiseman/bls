@@ -23,7 +23,19 @@ services:
         image: cassandra:latest
         networks:
             - bls
+    web-client:
+        build: ./c/web/client/
+        networks: 
+            - bls
+        ports: 
+            - "1234:80"
 
+    web-server:
+        build: ./c/web/server/
+        networks: 
+            - bls
+        ports: 
+            - "12345:80"
 
 
 
